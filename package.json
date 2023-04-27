@@ -1,0 +1,15 @@
+{
+  "name": "timeramo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://wxwxwxwxwxwxwxwx.github.io/Timer-Amo-Component",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  }
+}
