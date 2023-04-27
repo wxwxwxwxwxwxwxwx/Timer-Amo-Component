@@ -4,10 +4,14 @@ const timerEl = document.querySelector("span");
 
 let timeInterval = null;
 
+const setStartLabel = () => {
+  buttonEl.innerHTML = "Start";
+};
+
 // Напишите реализацию createTimerAnimator
 // который будет анимировать timerEl
 const createTimerAnimator = () => {
-  const setZeroBefore = value => {
+  const setZeroBeforeNum = value => {
     if (value < 10) {
       return "0" + value;
     }
@@ -15,9 +19,9 @@ const createTimerAnimator = () => {
   };
 
   const setFormatTime = seconds => {
-    let getSeconds = setZeroBefore(seconds % 60),
-      getHours = setZeroBefore(Math.floor(seconds / 60 / 60)),
-      getMinutes = setZeroBefore(Math.floor(seconds / 60) - getHours * 60);
+    let getSeconds = setZeroBeforeNum(seconds % 60),
+      getHours = setZeroBeforeNum(Math.floor(seconds / 60 / 60)),
+      getMinutes = setZeroBeforeNum(Math.floor(seconds / 60) - getHours * 60);
 
     return `${getHours}:${getMinutes}:${getSeconds}`;
   };
@@ -30,17 +34,23 @@ const createTimerAnimator = () => {
       timerEl.innerHTML = setFormatTime(currentTime);
     };
 
-    startFormatFunc();
-    timeInterval = setInterval(() => {
-      passedTime = passedTime += 1;
-      currentTime = seconds - passedTime;
+    if (seconds) {
+      startFormatFunc();
+      timeInterval = setInterval(() => {
+        passedTime = passedTime += 1;
+        currentTime = seconds - passedTime;
 
-      if (passedTime !== seconds + 1) {
-        startFormatFunc();
-      } else {
-        clearInterval(timeInterval);
-      }
-    }, 1000);
+        if (passedTime !== seconds + 1) {
+          startFormatFunc();
+        } else {
+          setStartLabel();
+          clearInterval(timeInterval);
+        }
+      }, 1000);
+    } else {
+      console.log("render");
+      timerEl.innerHTML = "00:00:00";
+    }
   };
 };
 
@@ -53,10 +63,20 @@ inputEl.addEventListener("input", e => {
   const PATTERN = /[^0-9]/;
 
   e.target.value = e.target.value.replace(PATTERN, "");
+
+  if (e.target.value) {
+    setStartLabel();
+  }
 });
 
 buttonEl.addEventListener("click", () => {
   const seconds = Number(inputEl.value);
+
+  if (seconds > 0) {
+    buttonEl.innerHTML = "Done";
+  } else {
+    setStartLabel();
+  }
 
   if (timeInterval) {
     clearInterval(timeInterval);
